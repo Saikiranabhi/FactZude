@@ -1,69 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Fact Checker</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FactZude — AI Fact Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<script>
-const button = document.querySelector("button");
-const textarea = document.querySelector("textarea");
-const resultCard = document.querySelector(".result-card");
-const verdictDiv = document.querySelector(".verdict");
-const explanationDiv = document.querySelector(".explanation");
-
-button.addEventListener("click", async () => {
-    const claim = textarea.value;
-
-    const response = await fetch("http://127.0.0.1:8000/fact-check", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ claim: claim })
-    });
-
-    const data = await response.json();
-
-    verdictDiv.innerText = data.analysis || "Completed";
-    explanationDiv.innerText = "Check console for full result";
-});
-</script>
 <body>
 
-<div class="background"></div>
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">Fact<span>Zude</span></div>
+  <div class="nav-tag">AI Powered · Real-time</div>
+</nav>
 
-<div class="container">
-    <h1>🧠 AI Fact Checker</h1>
-    <p class="subtitle">Real-time AI-powered verification with evidence</p>
+<!-- Split layout -->
+<div class="split">
 
-    <div class="input-section">
-        <textarea placeholder="Enter your claim here..."></textarea>
-        <button>Verify Claim</button>
+  <!-- ── LEFT: Input Panel ── -->
+  <div class="left">
+
+    <div class="left-header">
+      <div class="deco-line" style="margin-bottom:16px;"><span>Verify anything</span></div>
+      <h2>Is it <em>really</em><br>true?</h2>
+      <p style="margin-top:12px;">Enter any claim and our AI will search the web, analyse evidence, and return a clear verdict with sources.</p>
     </div>
 
-    <div class="result-card">
-        <div class="verdict true">TRUE</div>
-        <div class="confidence">
-            Confidence
-            <div class="progress-bar">
-                <div class="progress"></div>
-            </div>
-        </div>
-
-        <div class="explanation">
-            This claim matches multiple trusted sources and verified publications.
-        </div>
-
-        <div class="sources">
-            <h3>Sources</h3>
-            <ul>
-                <li><a href="#">Source 1 - Trusted News</a></li>
-                <li><a href="#">Source 2 - Research Article</a></li>
-            </ul>
-        </div>
+    <!-- Claim input -->
+    <div class="claim-box">
+      <label for="claimInput">Your claim</label>
+      <textarea id="claimInput" placeholder="e.g. The Eiffel Tower is taller than the Empire State Building…"></textarea>
+      <div class="box-footer">
+        <span class="char-hint" id="charHint">0 characters</span>
+        <button id="verifyBtn">Verify <span class="btn-icon">→</span></button>
+      </div>
     </div>
+
+    <!-- How it works -->
+    <div>
+      <div class="deco-line" style="margin-bottom:16px;"><span>How it works</span></div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <strong>Web Search</strong>
+            <span>Tavily scans trusted sources across the web in real-time.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>AI Analysis</strong>
+            <span>LLaMA 3 reasons over the evidence to form a judgment.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Verdict + Sources</strong>
+            <span>Get a confidence score and all supporting references.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── RIGHT: Result Panel ── -->
+  <div class="right">
+
+    <div class="right-header">
+      <h3>Analysis Result</h3>
+      <p>Your fact-check result will appear here</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState">
+      <div class="empty-icon">🔎</div>
+      <p>Submit a claim on the left to see the AI verdict here.</p>
+    </div>
+
+    <!-- Loading state -->
+    <div id="loadingState">
+      <div class="loader-ring"></div>
+      <p>Searching the web &amp;<br>analysing evidence…</p>
+    </div>
+
+    <!-- Error message -->
+    <div id="errorState"></div>
+
+    <!-- Result state -->
+    <div id="resultState">
+
+      <!-- Verdict card -->
+      <div class="verdict-card" id="verdictCard">
+        <div class="verdict-left">
+          <div class="verdict-icon" id="verdictIcon"></div>
+          <div>
+            <div class="verdict-label">Verdict</div>
+            <div class="verdict-word" id="verdictWord">—</div>
+          </div>
+        </div>
+        <div class="conf-side">
+          <div class="conf-label-sm">Confidence</div>
+          <div class="conf-number" id="confNumber">—</div>
+          <div class="conf-bar">
+            <div class="conf-fill" id="confFill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claim -->
+      <div class="info-block">
+        <div class="info-block-label">Claim</div>
+        <p class="claim-quote" id="claimDisplay"></p>
+      </div>
+
+      <!-- Explanation -->
+      <div class="info-block">
+        <div class="info-block-label">Explanation</div>
+        <p class="explanation-body" id="explanationDiv"></p>
+      </div>
+
+      <!-- Sources -->
+      <div class="info-block">
+        <div class="info-block-label">Sources</div>
+        <ul class="sources-list" id="sourcesList"></ul>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
+<script src="app.js"></script>
 </body>
 </html>

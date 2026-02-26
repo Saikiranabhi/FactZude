@@ -1,10 +1,22 @@
+# fastapi
+# uvicorn
+# python-dotenv
+# langchain
+# langchain-community
+# langchain-groq
+# langgraph
+# pydantic
+# pypdf
+# tavily-python
+
 fastapi
 uvicorn
 python-dotenv
+python-multipart
+httpx
 langchain
 langchain-community
 langchain-groq
 langgraph
 pydantic
 pypdf
-tavily-python
