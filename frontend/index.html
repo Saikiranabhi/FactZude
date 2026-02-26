@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Fact Checker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script>
+const button = document.querySelector("button");
+const textarea = document.querySelector("textarea");
+const resultCard = document.querySelector(".result-card");
+const verdictDiv = document.querySelector(".verdict");
+const explanationDiv = document.querySelector(".explanation");
+
+button.addEventListener("click", async () => {
+    const claim = textarea.value;
+
+    const response = await fetch("http://127.0.0.1:8000/fact-check", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ claim: claim })
+    });
+
+    const data = await response.json();
+
+    verdictDiv.innerText = data.analysis || "Completed";
+    explanationDiv.innerText = "Check console for full result";
+});
+</script>
+<body>
+
+<div class="background"></div>
+
+<div class="container">
+    <h1>🧠 AI Fact Checker</h1>
+    <p class="subtitle">Real-time AI-powered verification with evidence</p>
+
+    <div class="input-section">
+        <textarea placeholder="Enter your claim here..."></textarea>
+        <button>Verify Claim</button>
+    </div>
+
+    <div class="result-card">
+        <div class="verdict true">TRUE</div>
+        <div class="confidence">
+            Confidence
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            This claim matches multiple trusted sources and verified publications.
+        </div>
+
+        <div class="sources">
+            <h3>Sources</h3>
+            <ul>
+                <li><a href="#">Source 1 - Trusted News</a></li>
+                <li><a href="#">Source 2 - Research Article</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
