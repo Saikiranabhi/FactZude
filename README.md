@@ -156,9 +156,9 @@ cd ai_fact_checker/frontend
 python -m http.server 5500
 ```
 
-Frontend runs at: `http://localhost:5500`
+Live Demo of website: 
 
-> ⚠️ Always open the frontend via `http://localhost:5500` — never by double-clicking `index.html`. Opening via `file://` will block the API fetch call.
+> https://factzude-2.onrender.com/
 
 ---
 
