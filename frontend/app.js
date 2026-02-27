@@ -49,7 +49,7 @@ verifyBtn.addEventListener('click', async () => {
   verifyBtn.disabled = true;
 
   try {
-    const res = await fetch('https://factzude-2.onrender.com/fact-check', {
+    const res = await fetch('/fact-check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ claim })
